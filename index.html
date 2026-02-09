@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Café Aimée - Paris</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div id="broadcast-banner" class="broadcast-banner" style="display: none;"></div>
+        <div id="notification-container" class="notification-container"></div>
+        <div class="user-action-bar" style="position: absolute; top: 20px; right: 20px; z-index: 1500;">
+            <div id="user-display"
+                style="display: none; align-items: center; gap: 12px; background: #fff; padding: 8px 16px; border-radius: 30px; box-shadow: var(--shadow-soft); position: relative;">
+                <div id="order-status-trigger" onclick="toggleOrderStatus()"
+                    style="cursor: pointer; display: flex; align-items: center; position: relative;"
+                    title="Mes commandes">
+                    <ion-icon name="notifications-outline"
+                        style="font-size: 1.2rem; color: var(--color-accent);"></ion-icon>
+                    <span id="order-ready-dot"
+                        style="position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; background: #E74C3C; border-radius: 50%; display: none; border: 2px solid #fff;"></span>
+                </div>
+                <div style="width: 1px; height: 16px; background: #eee;"></div>
+                <ion-icon name="person-circle-outline"
+                    style="font-size: 1.2rem; color: var(--color-accent);"></ion-icon>
+                <span id="user-name-tag" style="font-weight: 600; font-size: 0.9rem;"></span>
+                <button onclick="userLogout()"
+                    style="background: none; border: none; color: #E74C3C; cursor: pointer; display: flex; align-items: center; padding: 4px;"
+                    title="Déconnexion"><ion-icon name="log-out-outline"></ion-icon></button>
+
+                <!-- Order Status Dropdown -->
+                <div id="order-status-dropdown" class="order-status-dropdown">
+                    <div class="status-dropdown-header">Mes Commandes</div>
+                    <div id="order-status-list" class="status-dropdown-list">
+                        <!-- Orders injected here -->
+                    </div>
+                </div>
+            </div>
+            <a href="user_login.html" id="user-login-link" class="btn-primary"
+                style="padding: 8px 16px; border-radius: 30px; font-size: 0.9rem; text-decoration: none;">
+                <ion-icon name="person-outline"></ion-icon> Se connecter
+            </a>
+        </div>
+        <div class="container">
+            <h1 class="brand-title">Café Aimée</h1>
+            <p class="brand-location"><a
+                    href="https://www.google.com/maps/search/?api=1&query=60+Rue+Bayen,+75017+Paris" target="_blank"
+                    style="color: inherit; text-decoration: none; border-bottom: 1px solid rgba(200, 138, 101, 0.3); transition: border-color 0.3s ease;">60
+                    Rue Bayen, 75017 Paris</a></p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div id="menu-container" class="menu-grid">
+                <!-- Menu categories will be injected here by JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Location Section -->
+    <section class="location-section" style="padding: 80px 0; background: #fff; text-align: center;">
+        <div class="container">
+            <h2 class="category-title">Nous trouver</h2>
+            <div class="address-link-container" style="margin-top: 32px;">
+                <a href="https://www.google.com/maps/search/?api=1&query=60+Rue+Bayen,+75017+Paris" target="_blank"
+                    style="display: inline-block; padding: 20px 40px; background: var(--color-bg); border-radius: var(--radius-lg); color: var(--color-text-main); text-decoration: none; font-weight: 600; box-shadow: var(--shadow-soft); transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.05);">
+                    <ion-icon name="location-outline"
+                        style="vertical-align: middle; margin-right: 8px; font-size: 1.2rem;"></ion-icon>
+                    60 Rue Bayen, 75017 Paris
+                </a>
+                <p style="margin-top: 16px; color: var(--color-text-muted); font-size: 0.9rem;">Cliquez pour ouvrir dans
+                    Google Maps</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Café Aimée. <a
+                    href="https://www.google.com/maps/search/?api=1&query=60+Rue+Bayen,+75017+Paris" target="_blank"
+                    style="color: inherit; text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.1);">60 Rue
+                    Bayen, 75017 Paris</a>.</p>
+            <p style="margin-top: 10px; opacity: 0.5; font-size: 0.8rem;"><a href="login.html"
+                    style="color: inherit; text-decoration: none;">Espace Staff</a></p>
+        </div>
+    </footer>
+
+    <!-- Floating Cart Button -->
+    <div id="cart-button" class="cart-button" onclick="toggleCart()">
+        <ion-icon name="basket-outline"></ion-icon>
+        <span id="cart-count">0</span>
+    </div>
+
+    <!-- Cart Modal Overlay -->
+    <div id="cart-overlay" class="cart-overlay" onclick="toggleCart()"></div>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h2>Votre Panier</h2>
+            <button class="close-cart" onclick="toggleCart()"><ion-icon name="close-outline"></ion-icon></button>
+        </div>
+        <div id="cart-items" class="cart-items">
+            <!-- Cart items will be injected here -->
+            <div class="empty-cart-msg">Votre panier est vide</div>
+        </div>
+        <div class="cart-footer">
+            <div id="pickup-time-container" style="margin-bottom: 20px; display: none;">
+                <label for="pickup-time"
+                    style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--color-text-muted); margin-bottom: 8px;">
+                    <ion-icon name="time-outline" style="vertical-align: middle; margin-right: 4px;"></ion-icon> Heure
+                    de passage prévue
+                </label>
+                <input type="time" id="pickup-time" class="pickup-time-input"
+                    style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: var(--radius-md); font-family: var(--font-body); font-size: 1rem; color: var(--color-text-main);">
+            </div>
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cart-total-value">0.00€</span>
+            </div>
+            <button id="checkout-btn" class="checkout-btn" onclick="submitOrder()" disabled>Commander</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

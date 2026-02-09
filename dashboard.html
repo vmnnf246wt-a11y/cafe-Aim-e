@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Café Aimée - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- Ionicons for icons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <!-- Chart.js for beautiful curves -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SortableJS for Drag and Drop -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="brand-title-small">Café Aimée</h2>
+                <span class="badge">Admin</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-tab="overview">
+                    <ion-icon name="grid-outline"></ion-icon>
+                    <span>Vue d'ensemble</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="menu">
+                    <ion-icon name="restaurant-outline"></ion-icon>
+                    <span>Menu Éditeur</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="orders">
+                    <ion-icon name="receipt-outline"></ion-icon>
+                    <span>Commandes</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="analytics">
+                    <ion-icon name="bar-chart-outline"></ion-icon>
+                    <span>Flux et Gestion</span>
+                </a>
+                <a href="index.html" class="nav-item return-link">
+                    <ion-icon name="arrow-back-outline"></ion-icon>
+                    <span>Retour au Site</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">D</div>
+                    <div class="user-info">
+                        <span class="user-name">Dahan</span>
+                        <span class="user-role">Gérant</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <header class="topbar">
+                <h1 id="page-title">Vue d'ensemble</h1>
+                <div class="topbar-actions">
+                    <button class="icon-btn" onclick="logout()" title="Déconnexion" style="color: #E74C3C;"><ion-icon
+                            name="log-out-outline"></ion-icon></button>
+                    <button class="icon-btn"><ion-icon name="notifications-outline"></ion-icon></button>
+                    <button class="icon-btn"><ion-icon name="settings-outline"></ion-icon></button>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Overview Tab -->
+                <div id="overview" class="tab-content active">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <p style="color: var(--color-text-muted);">Résumé de l'activité du café.</p>
+                        <button class="btn-primary" onclick="addStat()"
+                            style="background: var(--color-bg); color: var(--color-text-main); border: 1px solid #ddd;">
+                            <ion-icon name="plus-outline"></ion-icon> Ajouter une Stat
+                        </button>
+                    </div>
+
+                    <div class="stats-grid">
+                        <!-- Stat cards are rendered here by JS -->
+                    </div>
+
+                    <!-- Service Status Section -->
+                    <div class="service-status-section"
+                        style="background: #fff; padding: 24px; border-radius: 16px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h2 style="font-size: 1.2rem; font-family: var(--font-heading); margin-bottom: 4px;">Statut
+                                du Service</h2>
+                            <p id="service-status-text" style="font-size: 0.9rem; color: #8A9A5B; font-weight: 600;">Le
+                                service est actuellement OUVERT</p>
+                        </div>
+                        <button id="toggle-service-btn" onclick="toggleService()" class="btn-primary"
+                            style="background: #E74C3C; border: none; min-width: 160px;">
+                            <ion-icon name="pause-circle-outline"></ion-icon> Pauser le service
+                        </button>
+                    </div>
+
+                    <!-- Broadcast Section -->
+                    <div class="broadcast-section"
+                        style="background: #fff; padding: 24px; border-radius: 16px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <h2 style="font-size: 1.2rem; font-family: var(--font-heading);">Message Broadcast</h2>
+                            <span id="broadcast-status" style="font-size: 0.8rem; color: #8A9A5B; display: none;">En
+                                ligne</span>
+                        </div>
+                        <p style="margin-bottom: 12px; font-size: 0.9rem; color: var(--color-text-muted);">Ce message
+                            apparaîtra en haut du menu client.</p>
+                        <div style="display: flex; gap: 12px;">
+                            <input type="text" id="broadcast-input" placeholder="Ex: Happy Hour jusqu'à 18h !"
+                                style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: var(--font-body);">
+                            <button onclick="updateBroadcast()" class="btn-primary" style="white-space: nowrap;">
+                                <ion-icon name="megaphone-outline"></ion-icon> Publier
+                            </button>
+                            <button onclick="clearBroadcast()" class="btn-primary"
+                                style="background: #fff; color: #E74C3C; border: 1px solid #E74C3C;">
+                                <ion-icon name="close-outline"></ion-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="recent-activity">
+                        <h2>Activité Récente</h2>
+                        <ul class="activity-list">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Menu Editor Tab -->
+                <div id="menu" class="tab-content">
+                    <div class="section-header">
+                        <p>Gérez vos catégories et produits ici. Les modifications sont sauvegardées automatiquement.
+                        </p>
+                        <div class="actions" style="display: flex; gap: 12px;">
+                            <button class="btn-primary" onclick="addCategory()">
+                                <ion-icon name="folder-add-outline"></ion-icon> Nouvelle Catégorie
+                            </button>
+                        </div>
+                    </div>
+                    <div id="dashboard-menu-grid" class="menu-grid-editor">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Placeholders for other tabs -->
+                <div id="orders" class="tab-content">
+                    <div class="section-header"
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <p>Commandes en temps réel.</p>
+                        <button class="btn-primary" onclick="createNewOrder()">
+                            <ion-icon name="add-outline"></ion-icon> Créer une commande
+                        </button>
+                    </div>
+                    <!-- Populated by JS -->
+                </div>
+
+                <div id="analytics" class="tab-content">
+                    <div
+                        style="background: #FFF9C4; border: 1px solid #FBC02D; color: #F57F17; padding: 12px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 0.9rem;">
+                        <ion-icon name="construct-outline" style="font-size: 1.2rem;"></ion-icon>
+                        <span>MODE TEST : Ces outils sont en cours d'optimisation pour une meilleure précision.</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px;">
+                        <!-- Visit Flux Chart -->
+                        <div class="stat-card"
+                            style="flex-direction: column; align-items: stretch; cursor: default; padding: 24px;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                                <div class="stat-icon combined" style="background: #E8F5E9; color: #4CAF50;">
+                                    <ion-icon name="trending-up-outline"></ion-icon>
+                                </div>
+                                <h2 style="font-size: 1.2rem; font-family: var(--font-heading);">Affluence (Visites)
+                                </h2>
+                            </div>
+                            <div id="analytics-flux-container" style="min-height: 250px; position: relative;">
+                                <canvas id="fluxChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Top Products Chart -->
+                        <div class="stat-card"
+                            style="flex-direction: column; align-items: stretch; cursor: default; padding: 24px;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                                <div class="stat-icon combined" style="background: #FFF3E0; color: #FF9800;">
+                                    <ion-icon name="star-outline"></ion-icon>
+                                </div>
+                                <h2 style="font-size: 1.2rem; font-family: var(--font-heading);">Top Produits (Ventes)
+                                </h2>
+                            </div>
+                            <div id="analytics-products-container" style="min-height: 200px;">
+                                <!-- Bars injected by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Drink Details Modal -->
+    <div id="details-modal" class="modal-overlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 id="modal-title">Détails des consommations</h2>
+                <button class="close-btn" onclick="closeModal()"><ion-icon name="close-outline"></ion-icon></button>
+            </div>
+            <div id="modal-body" class="modal-body">
+                <!-- Drink list will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
